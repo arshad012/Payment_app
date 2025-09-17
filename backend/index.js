@@ -24,14 +24,10 @@ paymentApp.use(json());
 paymentApp.use(cors());
 
 // MongoDB Connection
-mongoose.connect(db_uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
+mongoose.connect(db_uri)
     .then(() => {
         console.log('✅ MongoDB connected');
 
-        // Start server only after DB is ready
         paymentApp.listen(port, () => {
             console.log(`🚀 Payment app is running on port ${port}`);
         });
@@ -40,6 +36,20 @@ mongoose.connect(db_uri, {
         console.error('❌ MongoDB connection failed:', err);
         process.exit(1);
     });
+
+mongoose.connection.on('connected', () => {
+    console.log('📡 Mongoose connected to DB');
+});
+
+mongoose.connection.on('error', (err) => {
+    console.error('⚠️ Mongoose connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+    console.warn('🔌 Mongoose disconnected');
+});
+
+
 
 // API Routes
 paymentApp.use('/auth', authRouter);
