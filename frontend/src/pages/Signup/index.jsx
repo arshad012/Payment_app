@@ -25,6 +25,7 @@ function SignupPage() {
         password: false,
         confirmPassword: false
     });
+    const [loading, setLoading] = useState(false);
     const toast = useToast();
 
     const validateAllInputFields = () => {
@@ -98,6 +99,7 @@ function SignupPage() {
 
         try {
             delete formData.confirmPassword // deleting confirmPassword key because DB don't need this
+            setLoading(true);
 
             const res = await fetch(`${BASE_URL}/auth/signup`, {
                 method: 'POST',
@@ -132,6 +134,7 @@ function SignupPage() {
             console.log('error:', error)
 
             setErrors(prev => ({ ...prev, email: error.message }));
+            setLoading(false);
 
             toast({
                 title: error.message,
@@ -242,7 +245,7 @@ function SignupPage() {
                             {errors.confirmPassword && <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>}
                         </FormControl>
 
-                        <Button type='submit' w='full' colorScheme='blue' mt={5} _hover={{ textDecoration: 'underline' }}>Submit</Button>
+                        <Button type='submit' w='full' colorScheme='blue' mt={5} _hover={{ textDecoration: 'underline' }} isLoading={loading}>Submit</Button>
 
                         <Flex gap='2' mt={5}>
                             <Text display='flex' gap='2'>Already have an account?</Text>
