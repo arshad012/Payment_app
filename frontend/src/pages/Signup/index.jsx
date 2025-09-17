@@ -152,8 +152,15 @@ function SignupPage() {
     }
 
     return (
-        <Box h='100vh' overflow='auto' bg='#F3F2EC'>
-            <Box w={{ base: '90%', sm: '400px', md: '450px' }} m='auto' my={5} p={6} boxShadow='lg' border='1px solid gray' borderRadius='xl' bg='white'>
+        <Box 
+            h='100vh' 
+            overflow='auto' 
+            bgImage="url('../../login_bg_img.jpg')"
+            bgPosition="center"
+            bgRepeat="no-repeat"
+            bgSize='cover'
+        >
+            <Box w={{ base: '90%', sm: '400px', md: '450px' }} m='auto' my={5} p={6} boxShadow='lg' border='1px solid gray' borderRadius='xl' bg='transparent' backdropFilter='blur(10px)'>
                 <form onSubmit={handleSubmit}>
                     <VStack spacing={4}>
 
