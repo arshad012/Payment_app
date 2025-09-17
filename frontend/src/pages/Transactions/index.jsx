@@ -44,7 +44,7 @@ function TransactionsPage() {
     return (
         <Box bg='#F3F2EC' h='100vh' overflow='auto'>
             <Navbar />
-            <Box w={{ base: '95%', sm: '90%' }} m='auto' mt={5} bg='white' p={5} borderRadius='lg' boxShadow='xl'>
+            <Box w={{ base: '95%', sm: '90%' }} m='auto' my={5} bg='white' p={5} borderRadius='lg' boxShadow='xl'>
                 <Box h='60px' w={{ base: '95%', sm: '90%' }}>
                     <Menu>
                         <MenuButton

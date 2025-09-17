@@ -4,7 +4,8 @@ import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import InformativeDrawer from '../../components/Drawer';
 import { BASE_URL } from '../../base_url';
-import Navbar from '../../components/Navbar'
+import Navbar from '../../components/Navbar';
+import { getTimeTaken } from '../../utils';
 
 function PaymentStatus() {
     const { isOpen, onOpen, onClose } = useDisclosure(); // Drawer
@@ -74,7 +75,7 @@ function PaymentStatus() {
                         <Tbody>
                             {order?._id &&
                                 <Tr _hover={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px;' }} style={{ transition: 'all 0.5s' }}>
-                                    <Td>{order?.createdAt ?? 'N/A'}</Td>
+                                    <Td>{getTimeTaken(order?.createdAt) ?? 'N/A'}</Td>
                                     <Td>{order?._id ?? 'N/A'}</Td>
                                     <Td>{order?.order_amount ?? 'N/A'}</Td>
                                     <Td>{order?.order_amount && order?.order_amount + 100}</Td>
