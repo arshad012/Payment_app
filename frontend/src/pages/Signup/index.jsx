@@ -12,6 +12,7 @@ function SignupPage() {
         email: '',
         roll: 'Trustee',
         password: '',
+        confirmPassword: '',
         school_id: ''
     })
     const [errors, setErrors] = useState({
@@ -49,11 +50,7 @@ function SignupPage() {
             if (!validatePassword(formData.password)) tempErrors.password = 'Password must have atleast one Uppercase, Lowercase, special character and number';
         }
 
-        if (!formData.confirmPassword) {
-            tempErrors.confirmPassword = 'Password not matched';
-        } else {
-            if (formData.password !== formData.confirmPassword) tempErrors.confirmPassword = 'Password not matched';
-        }
+        if (formData.password !== formData.confirmPassword) tempErrors.confirmPassword = 'Password not matched';
 
         return tempErrors;
     }
@@ -67,7 +64,7 @@ function SignupPage() {
             }
                 break;
             case 'password': {
-                if (!validatePassword(value)) error = 'Password must have atleast one Uppercase, Lowercase, special character and number';
+                if (!validatePassword(value)) error = 'Password must have atleast one Uppercase, Lowercase, special character @#$%&* and number';
             }
                 break;
             default:
@@ -79,14 +76,13 @@ function SignupPage() {
 
 
     const handleChange = e => {
-        const value = e.target.value
         const name = e.target.name
-        setFormData({ ...formData, [name]: value });
-
+        const value = e.target.value
         validateInputField(name, value);
+        setFormData(prev => ({ ...prev, [name]: value }));
     }
 
-    const handleSubmit = async e => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const tempErrors = validateAllInputFields();
@@ -96,14 +92,14 @@ function SignupPage() {
             return;
         }
 
-
         try {
-            delete formData.confirmPassword // deleting confirmPassword key because DB don't need this
+            const submitData = {...formData};
+            delete submitData.confirmPassword // deleting confirmPassword key because DB don't need this
             setLoading(true);
 
             const res = await fetch(`${BASE_URL}/auth/signup`, {
                 method: 'POST',
-                body: JSON.stringify(formData),
+                body: JSON.stringify(submitData),
                 headers: {
                     'content-Type': 'application/json'
                 }
@@ -148,13 +144,13 @@ function SignupPage() {
     }
 
     const handleRadioChange = (value) => {
-        setFormData({ ...formData, ['roll']: value });
+        setFormData(prev => ({ ...prev, roll: value }));
     }
 
     return (
-        <Box 
-            h='100vh' 
-            overflow='auto' 
+        <Box
+            h='100vh'
+            overflow='auto'
             bgImage="url('../../login_bg_img.jpg')"
             bgPosition="center"
             bgRepeat="no-repeat"

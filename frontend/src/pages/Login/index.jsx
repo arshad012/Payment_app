@@ -21,7 +21,7 @@ function LoginPage() {
         const tempErrors = {};
 
         if (!formData.email) {
-            tempErrors.email = 'Invalid email';
+            tempErrors.email = 'Email is required';
         } else {
             if (!validateEmail(formData.email)) tempErrors.email = 'Invalid email';
         }
@@ -36,15 +36,11 @@ function LoginPage() {
 
         switch (name) {
             case 'email':
-                if (!validateEmail(formData.email)) tempErrors.email = 'Invalid email';
+                if (!validateEmail(value)) tempErrors.email = 'Invalid email';
                 else tempErrors.email = null;
                 break;
             case 'password':
-                /*
-                    here we are checking if password field have some value or not even a single character but due to asynchronous 
-                    setState it does't catch first value but it is there so we check if it is empty, if so then it has some value
-                 */
-                if (!formData.password) tempErrors.password = '';
+                if (!value) tempErrors.password = '';
                 else tempErrors.password = null;
                 break;
             default:
@@ -55,11 +51,10 @@ function LoginPage() {
     }
 
     const handleChange = e => {
-        const value = e.target.value
         const name = e.target.name
-        setFormData({ ...formData, [name]: value });
-
+        const value = e.target.value
         validateInputField(name, value);
+        setFormData({ ...formData, [name]: value });
     }
 
     const handleSubmit = async e => {

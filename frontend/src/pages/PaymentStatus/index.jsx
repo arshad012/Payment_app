@@ -15,7 +15,7 @@ function PaymentStatus() {
     const [order, setOrder] = useState({});
     const [isError, setIsError] = useState(false);
     const data = JSON.parse(localStorage.getItem('full_response')) || {}; // this data is stored in localstorage by create-payment page
-    const order_id = data.data.order_id;
+    const order_id = data?.data?.order_id;
 
     const [searchParams, setSearchParams] = useSearchParams();
     const status = searchParams.get('status') ? (searchParams.get('status')).toUpperCase() : '';
@@ -24,6 +24,7 @@ function PaymentStatus() {
     useEffect(() => {
         const fetchPaymentStatus = async (order_id, status) => {
             status = status.toLowerCase();
+            
             try {
                 const response = await axios.get(`${BASE_URL}/api/payment-status?order_id=${order_id}&updatedStatus=${status}`);
                 // console.log('response:', response.data)
@@ -36,7 +37,9 @@ function PaymentStatus() {
             }
         }
 
-        fetchPaymentStatus(order_id, status);
+        if(order_id && status) {
+            fetchPaymentStatus(order_id, status);
+        }
     }, [])
 
     return (isError ?
