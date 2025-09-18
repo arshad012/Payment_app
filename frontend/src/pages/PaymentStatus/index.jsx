@@ -2,25 +2,24 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button, Box, Table, Thead, Tbody, Tr, Th, Td, TableCaption, TableContainer, Flex, Text, useDisclosure } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
-import InformativeDrawer from '../../components/Drawer';
+import InformativeModel from '../../components/Modal';
 import { BASE_URL } from '../../base_url';
 import Navbar from '../../components/Navbar';
 import { getTimeTaken } from '../../utils';
 
 function PaymentStatus() {
     const { isOpen, onOpen, onClose } = useDisclosure(); // Drawer
-    const { isOpen: isOpenModal, onOpen: onOpenModal, onClose: onCloseModal } = useDisclosure(); // Modal
     const btnRef = useRef();
     {/*  */ }
     const navigate = useNavigate();
     const [order, setOrder] = useState({});
     const [isError, setIsError] = useState(false);
-    const data = JSON.parse(localStorage.getItem('full_response')) || {};
+    const data = JSON.parse(localStorage.getItem('full_response')) || {}; // this data is stored in localstorage by create-payment page
     const order_id = data.data.order_id;
 
     const [searchParams, setSearchParams] = useSearchParams();
     const status = searchParams.get('status') ? (searchParams.get('status')).toUpperCase() : '';
-    const colorCode = status === 'SUCCESS' ? 'green' : status === 'CANCELLED' ? 'red' : status === 'PENDING' ? 'blue' : 'blue'
+    const colorCode = status === 'SUCCESS' ? 'green' : status === 'CANCELLED' ? 'red' : 'blue';
 
     useEffect(() => {
         const fetchPaymentStatus = async (order_id, status) => {
@@ -47,13 +46,13 @@ function PaymentStatus() {
         </Flex> :
         <Box bg='#F3F2EC' h='100vh' overflow='auto'>
             {/*  */}
-            <InformativeDrawer btnRef={btnRef} isOpen={isOpen} onClose={onClose} isOpenModal={isOpenModal} onOpenModal={onOpenModal} onCloseModal={onCloseModal} />
+            <InformativeModel isOpen={isOpen} onClose={onClose} />
             {/*  */}
             <Navbar />
             {/*  */}
 
             <Box w={{ base: '95%', sm: '90%' }} m='auto' mt={5} bg='white' p={5} borderRadius='lg' boxShadow='xl'>
-                <Button ref={btnRef} colorScheme='blue' onClick={onOpen} size={{ base: 'sm', md: 'md' }}>
+                <Button colorScheme='blue' onClick={onOpen} size={{ base: 'sm', md: 'md' }}>
                     Information
                 </Button>
                 {/* above button is for Drawer and not related to this page but due to design requirements we put it in this file */}

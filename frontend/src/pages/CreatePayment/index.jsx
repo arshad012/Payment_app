@@ -11,7 +11,7 @@ function CreatePaymentPage() {
     const [user, setUser] = useState(null);
     const [amount, setAmount] = useState('');
     const [loading, setLoading] = useState({
-        lodingUserInfo: true,
+        lodingUserInfo: false,
         loadingPaymentLink: false
     });
     const [isError, setIsError] = useState(null);
@@ -19,10 +19,9 @@ function CreatePaymentPage() {
     const loginToken = localStorage.getItem(loginLocalStorageKey);
 
     useEffect(() => {
+        setLoading(prev => ({ ...prev, lodingUserInfo: true }));
 
         const fetchUserInfo = async () => {
-            setLoading(prev => ({ ...prev, lodingUserInfo: true }));
-
             try {
                 const response = await axios.get(`${BASE_URL}/user/profile`, {
                     headers: {
@@ -30,13 +29,10 @@ function CreatePaymentPage() {
                     }
                 })
                 setUser(response.data.user);
-                setTimeout(() => {
-                    setLoading(prev => ({ ...prev, lodingUserInfo: false }));
-                }, 2000)
+                setLoading(prev => ({ ...prev, lodingUserInfo: false }));
             } catch (error) {
                 console.log('Could not fetch user info. try again', error.message);
                 setIsError(error.response.data.message);
-            } finally {
                 setLoading(prev => ({ ...prev, lodingUserInfo: false }));
             }
         }
@@ -47,12 +43,17 @@ function CreatePaymentPage() {
     }, [])
 
     const handleChange = e => {
-        if(amount < 50000) {
+        const value = Number(e.target.value);
+        if(value === 0) {
+            setAmount('');
+            return
+        }
+        
+        if(value <= 50000) {
             setErrors({amount: ''});
         } else {
-            setErrors({amount: 'You can not send more than 50,000'});
+            setErrors({amount: 'You can not send more than rupees 50,000'});
         }
-        const value = Number(e.target.value);
         setAmount(value)
     }
 
@@ -176,7 +177,7 @@ function CreatePaymentPage() {
                                 <Button
                                     type="submit"
                                     colorScheme="blue"
-                                    isDisabled={amount <= 0 || loading.loadingPaymentLink}
+                                    isDisabled={amount <= 0 || amount > 50000 || loading.loadingPaymentLink}
                                     isLoading={loading.loadingPaymentLink}
                                     size={{ base: 'sm', md: 'md' }}
                                 >Proceed

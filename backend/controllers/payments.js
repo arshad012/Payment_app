@@ -1,7 +1,7 @@
 import { config } from 'dotenv';
 import axios from 'axios';
 import { generateSign } from "../JWT_services/index.js";
-import { Order, OrderStatus } from "../models/index.js";
+import { Order, OrderStatus, WebhookLog } from "../models/index.js";
 import { BASE_URL } from '../base_url/index.js';
 
 config();
@@ -76,13 +76,51 @@ export const paymentStatus = async (req, res) => {
     try {
         const order = await Order.findById(order_id);
 
-        const orderStatus = await OrderStatus.findOneAndUpdate(
-            { collect_id: order_id },
-            { $set: { status: updatedStatus, order_amount: order.order_amount } }
+        // const orderStatus = await OrderStatus.findOneAndUpdate(
+        //     { collect_id: order_id },
+        //     { $set: { status: updatedStatus, order_amount: order.order_amount } }
+        // );
+        // webhook work start here
+        const webhook = new WebhookLog({
+            payload: {
+                status: 200,
+                order_info: {
+                    order_id: order._id,
+                    order_amount: order.order_amount,
+                    transaction_amount: order.order_amount + 100,
+                    gateway: "PhonePay",
+                    bank_reference: "YESBNK222",
+                    payment_mode: "upi",
+                    payment_details: "success@ybl",
+                    Payment_message: "payment success",
+                    payment_time: order.createdAt,
+                    error_message: "NA"
+                }
+            },
+            collect_id: order._id
+        });
+
+        await webhook.save();
+
+        const orderStatus = new OrderStatus(
+            {
+                collect_id: order._id, // collect_id = corresponding order ID
+                order_amount: order.order_amount,
+                transaction_amount: order.order_amount+100,
+                payment_mode: 'upi',
+                payment_details: "success@ybl",
+                bank_reference: "YESBNK222",
+                status: updatedStatus,
+                payment_message: "payment success",
+                error_message: "N/A",
+                payment_time: order.createdAt
+            }
         );
+        await orderStatus.save();
+        // webhook work end here
 
         return res.status(200).json({
-            message: 'Successfully updated status of order',
+            message: 'Successfully updated the status of order',
             order
         })
     } catch (error) {
