@@ -1,8 +1,8 @@
-import { validateEmail, validateName, validatePassword, validateRoll } from './validators/index.js';
+import { validateEmail, validateName, validatePassword } from './validators/index.js';
 import { saveUser } from '../helper/index.js';
 
 export const signup = async (req, res) => {
-    const { name, email, password, roll, school_id } = req.body;
+    const { name, email, password, school_id } = req.body;
 
     // check all fields are valid or not
     if (!validateName(name)) {
@@ -22,13 +22,6 @@ export const signup = async (req, res) => {
             message: 'Invalid password. please fulfill password requirements'
         });
     }
-
-    if (!validateRoll(roll)) {
-        return res.json({
-            message: 'Invalid password. please fulfill password requirements'
-        });
-    }
-
 
     // save user with hashed password
     const result = await saveUser(req.body);

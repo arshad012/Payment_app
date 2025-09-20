@@ -10,7 +10,6 @@ export const saveUser = async (user) => {
         await newUser.save();
         return {success: true, message: 'Signup seccessfull', user: newUser};
     } catch (error) {
-        // console.log('error:', error.message)
         return {success: false, message: error.message};
     }
 }

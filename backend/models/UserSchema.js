@@ -17,17 +17,9 @@ export const UserSchema = new Schema({
         required: true,
         minlength: 6
     },
-    role: {
-        type: String,
-        enum: Object.values(userRollSchema),
-        default: userRollSchema.SCHOOL
-    },
     school_id: {
         type: String,
-        // type: Schema.Types.ObjectId,
-        // ref: 'School'
     }
 })
-
 
 export const User = model('User', UserSchema);

@@ -1,7 +1,6 @@
 import { FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Box, VStack, Button, InputGroup, InputRightElement, Text, useToast, textDecoration, Flex } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import UserRoll from './userRoll'
 import { validateEmail, validateName, validatePassword } from '../../validators'
 import { BASE_URL } from '../../base_url'
 
@@ -10,7 +9,6 @@ function SignupPage() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        roll: 'Trustee',
         password: '',
         confirmPassword: '',
         school_id: ''
@@ -18,7 +16,6 @@ function SignupPage() {
     const [errors, setErrors] = useState({
         name: null,
         email: null,
-        roll: null,
         password: null,
         confirmPassword: null
     })
@@ -111,7 +108,6 @@ function SignupPage() {
                 throw new Error(data.message);
             }// if error occurs then try block will terminate here
 
-            // console.log('data:', data);
 
             toast({
                 title: 'Signup successfull.',
@@ -143,10 +139,6 @@ function SignupPage() {
         }
     }
 
-    const handleRadioChange = (value) => {
-        setFormData(prev => ({ ...prev, roll: value }));
-    }
-
     return (
         <Box
             h='100vh'
@@ -168,6 +160,7 @@ function SignupPage() {
                                 type='text'
                                 name='name'
                                 boxShadow='sm'
+                                borderColor="black"
                                 value={formData.name}
                                 onChange={handleChange}
                             />
@@ -180,6 +173,7 @@ function SignupPage() {
                                 type='email'
                                 name='email'
                                 boxShadow='sm'
+                                borderColor="black"
                                 value={formData.email}
                                 onChange={handleChange}
                             />
@@ -191,14 +185,6 @@ function SignupPage() {
                             }
                         </FormControl>
 
-                        <FormControl>
-                            <FormLabel>You are signing up as:</FormLabel>
-                            <InputGroup>
-                                <UserRoll onChange={handleRadioChange} />
-                            </InputGroup>
-                            <FormHelperText>If you don't select any roll then default roll will be Trustee</FormHelperText>
-                        </FormControl>
-
                         <FormControl isInvalid={errors.password}>
                             <FormLabel>Create password</FormLabel>
                             <InputGroup>
@@ -206,6 +192,7 @@ function SignupPage() {
                                     type={show.password ? 'text' : 'password'}
                                     name='password'
                                     boxShadow='sm'
+                                    borderColor="black"
                                     value={formData.password}
                                     onChange={handleChange}
                                 />
@@ -233,6 +220,7 @@ function SignupPage() {
                                     type={show.confirmPassword ? 'text' : 'password'}
                                     name='confirmPassword'
                                     boxShadow='sm'
+                                    borderColor="black"
                                     value={formData.confirmPassword}
                                     onChange={handleChange}
                                 />
