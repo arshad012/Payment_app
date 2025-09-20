@@ -1,10 +1,12 @@
-import { Box, FormControl, FormLabel, Input, Heading, VStack, Stack, Button, InputLeftElement, InputGroup, Text, Flex, Skeleton, FormErrorMessage } from "@chakra-ui/react"
+import { Box, FormControl, FormLabel, Input, Heading, VStack, Stack, Button, InputLeftElement, InputGroup, Text, Flex, Skeleton, FormErrorMessage, Divider, Avatar, HStack, Spacer } from "@chakra-ui/react"
 import { loginLocalStorageKey } from "../../utils"
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from '../../base_url';
+
 import Navbar from '../../components/Navbar'
+import WebsiteFooter from "../../components/Footer";
 
 function CreatePaymentPage() {
     const navigate = useNavigate();
@@ -15,7 +17,7 @@ function CreatePaymentPage() {
         loadingPaymentLink: false
     });
     const [isError, setIsError] = useState(null);
-    const [errors, setErrors] = useState({amount: ""});
+    const [errors, setErrors] = useState({ amount: "" });
     const loginToken = localStorage.getItem(loginLocalStorageKey);
 
     useEffect(() => {
@@ -44,15 +46,15 @@ function CreatePaymentPage() {
 
     const handleChange = e => {
         const value = Number(e.target.value);
-        if(value === 0) {
+        if (value === 0) {
             setAmount('');
             return
         }
-        
-        if(value <= 50000) {
-            setErrors({amount: ''});
+
+        if (value <= 50000) {
+            setErrors({ amount: '' });
         } else {
-            setErrors({amount: 'You can not send more than rupees 50,000'});
+            setErrors({ amount: 'You can not send more than rupees 50,000' });
         }
         setAmount(value)
     }
@@ -60,11 +62,11 @@ function CreatePaymentPage() {
     const handleSubmit = async e => {
         e.preventDefault();
 
-        if(amount > 50000) {
-            setErrors({amount: 'You can not send more than 50,000'});
+        if (amount > 50000) {
+            setErrors({ amount: 'You can not send more than 50,000' });
             return;
         }
-        
+
         try {
             setLoading(prev => ({ ...prev, loadingPaymentLink: true }));
             const response = await axios.post(`${BASE_URL}/api/create-payment`,
@@ -91,7 +93,6 @@ function CreatePaymentPage() {
     }
 
 
-    // loading.lodingUserInfo
     return (isError ?
         <Flex w='fit-content' m='auto' direction='column' align='start' gap={2}>
             <Text fontSize='xl' color='red' textAlign='center' mt={5}>{isError}</Text>
@@ -101,112 +102,128 @@ function CreatePaymentPage() {
             {/*  */}
             <Navbar />
             {/*  */}
-            <Box w={{ base: '95%', sm: '90%' }} m='auto' mt={5} p={6} borderRadius='lg' boxShadow='lg' bg='white'>
-                <Heading fontSize='xl'>You are all set to make your  payments</Heading>
+            <Flex direction="column" h="full">
+            <Box
+                maxW="container.md"
+                w={{ base: '95%', sm: '90%' }}
+                m="auto"
+                mt={10}
+                p={8}
+                borderRadius="xl"
+                boxShadow="dark-lg"
+                bgGradient="linear(to-br, white, gray.50)"
+            >
+                <VStack spacing={6} align="stretch">
+                    <Heading fontSize="2xl" textAlign="center" color="blue.600">
+                        🎉 You’re all set to make your payments!
+                    </Heading>
 
-                <form onSubmit={handleSubmit}>
-                    <VStack spacing={5} alignItems='start'>
-                        <Stack direction={{ base: 'column', sm: 'row' }} spacing={5} mt={5} w='full'>
-                            <FormControl>
-                                <FormLabel>Name</FormLabel>
-                                <Skeleton
-                                    isLoaded={!loading.lodingUserInfo}
-                                    fadeDuration={1}
-                                    borderRadius='md'
-                                >
-                                    <Input
-                                        type='text'
-                                        name='name'
-                                        boxShadow='sm'
-                                        value={user?.name}
-                                        isReadOnly
-                                        size={{ base: 'sm', md: 'md' }}
-                                    />
+                    <Box
+                        bg="gray.100"
+                        p={4}
+                        borderRadius="md"
+                        boxShadow="md"
+                        textAlign="center"
+                    >
+                        <Text fontSize="sm" color="gray.700">
+                            Empowering education, one transaction at a time. Let’s make it smooth and secure.
+                        </Text>
+                    </Box>
+
+                    <form onSubmit={handleSubmit}>
+                        <VStack spacing={5} align="stretch">
+                            <Box
+                                bg="gray.100"
+                                p={5}
+                                borderRadius="md"
+                                boxShadow="md"
+                                display="flex"
+                                alignItems="center"
+                                gap={4}
+                            >
+                                <Skeleton isLoaded={!loading.lodingUserInfo} borderRadius="full">
+                                    <Avatar name={user?.name} size="lg" />
+                                </Skeleton>
+                                <Skeleton isLoaded={!loading.lodingUserInfo}>
+                                    <Box>
+                                        <Text fontSize="lg" fontWeight="bold" color="gray.800">
+                                            {user?.name || "User Name"}
+                                        </Text>
+                                        <Text fontSize="sm" color="gray.600">
+                                            {user?.email || "user@example.com"}
+                                        </Text>
+                                    </Box>
+                                </Skeleton>
+                            </Box>
+
+                            <FormControl isInvalid={errors.amount}>
+                                <FormLabel>Amount</FormLabel>
+                                <Skeleton isLoaded={!loading.lodingUserInfo} borderRadius="md">
+                                    <InputGroup size="md">
+                                        <InputLeftElement pointerEvents="none" fontSize="md" color="gray.500">
+                                            INR
+                                        </InputLeftElement>
+                                        <Input
+                                            type="number"
+                                            name="amount"
+                                            value={amount}
+                                            onChange={handleChange}
+                                            placeholder="Enter amount"
+                                            bg="white"
+                                            boxShadow="sm"
+                                        />
+                                    </InputGroup>
+                                    <FormErrorMessage>{errors.amount}</FormErrorMessage>
                                 </Skeleton>
                             </FormControl>
 
-                            <FormControl>
-                                <FormLabel>Email</FormLabel>
-                                <Skeleton
-                                    isLoaded={!loading.lodingUserInfo}
-                                    fadeDuration={1}
-                                    borderRadius='md'
-                                >
-                                    <Input
-                                        type='email'
-                                        name='email'
-                                        boxShadow='sm'
-                                        value={user?.email}
-                                        isReadOnly
-                                        size={{ base: 'sm', md: 'md' }}
-                                    />
+                            <Flex justify="center" gap={4}>
+                                <Skeleton isLoaded={!loading.lodingUserInfo} borderRadius="md">
+                                    <Button
+                                        type="submit"
+                                        colorScheme="teal"
+                                        size="md"
+                                        isDisabled={amount <= 0 || amount > 50000 || loading.loadingPaymentLink}
+                                        isLoading={loading.loadingPaymentLink}
+                                    >
+                                        Proceed
+                                    </Button>
                                 </Skeleton>
-                            </FormControl>
-                        </Stack>
-                        <FormControl isInvalid={errors.amount}>
-                            <FormLabel>Amount</FormLabel>
-                            <Skeleton
-                                isLoaded={!loading.lodingUserInfo}
-                                fadeDuration={1}
-                                borderRadius='md'
-                            >
-                                <InputGroup size={{ base: 'sm', md: 'md' }}>
-                                    <InputLeftElement pointerEvents='none' fontSize={{ base: '12px', md: '16px' }}>
-                                        INR
-                                    </InputLeftElement>
-                                    <Input
-                                        type='number'
-                                        name='amount'
-                                        boxShadow='sm'
-                                        value={amount}
-                                        onChange={handleChange}
-                                        placeholder='Amount'
-                                        size={{ base: 'sm', md: 'md' }}
-                                    />
-                                </InputGroup>
-                                <FormErrorMessage>{errors.amount}</FormErrorMessage>
-                            </Skeleton>
-                        </FormControl>
 
-                        <Flex gap={3}>
-                            <Skeleton
-                                isLoaded={!loading.lodingUserInfo}
-                                fadeDuration={1}
-                                borderRadius='md'
-                            >
-                                <Button
-                                    type="submit"
-                                    colorScheme="blue"
-                                    isDisabled={amount <= 0 || amount > 50000 || loading.loadingPaymentLink}
-                                    isLoading={loading.loadingPaymentLink}
-                                    size={{ base: 'sm', md: 'md' }}
-                                >Proceed
-                                </Button>
-                            </Skeleton>
-                        </Flex>
-                    </VStack>
-                </form>
-                {/*  */}
-                <Skeleton
-                    isLoaded={!loading.lodingUserInfo}
-                    fadeDuration={1}
-                    borderRadius='md'
-                    mt={3}
-                    w='fit-content'
-                >
-                    <Button
-                        type="submit"
-                        colorScheme="blue"
-                        variant='outline'
-                        isDisabled={loading.loadingPaymentLink}
-                        size={{ base: 'sm', md: 'md' }}
-                        onClick={() => navigate("/transactions")}
-                    >All Transactions
-                    </Button>
-                </Skeleton>
+                                <Skeleton isLoaded={!loading.lodingUserInfo} borderRadius="md">
+                                    <Button
+                                        variant="outline"
+                                        colorScheme="teal"
+                                        size="md"
+                                        isDisabled={loading.loadingPaymentLink}
+                                        onClick={() => navigate("/transactions")}
+                                    >
+                                        All Transactions
+                                    </Button>
+                                </Skeleton>
+                            </Flex>
+                        </VStack>
+                    </form>
+
+                    <Divider my={6} />
+
+                    <Box textAlign="center">
+                        <Text fontSize="sm" color="gray.500">
+                            Need help or have questions? Visit our{" "}
+                            <Button variant="link" colorScheme="blue" onClick={() => navigate("/support")}>
+                                Support Center
+                            </Button>
+                        </Text>
+                    </Box>
+                </VStack>
             </Box>
+
+            <Spacer />
+            
+            <WebsiteFooter />
+            </Flex>
         </Box>
     )
 }
 
-export default CreatePaymentPage
+export default CreatePaymentPage;

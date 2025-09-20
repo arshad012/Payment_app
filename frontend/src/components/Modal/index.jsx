@@ -1,8 +1,4 @@
 import {
-    Highlight,
-    List,
-    ListItem,
-    ListIcon,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -10,68 +6,57 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
+    VStack,
+    Box,
+    Button,
+    Text
 } from '@chakra-ui/react';
-import { CheckCircleIcon } from '@chakra-ui/icons';
 
-function InformativeModel({ isOpen, onClose }) {
+function InformativeModal({ isOpen, onClose }) {
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size='xl'>
+        <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
             <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>
-                    Order status & Webhook Integration information
+            <ModalContent borderRadius="xl" boxShadow="2xl" bg="white">
+                <ModalHeader fontSize="2xl" fontWeight="bold" color="blue.600">
+                    Project Overview
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    {/* <Image
-                                src='../../../postman_data.png'
-                                alt='Post dummy data'
-                                w='full'
-                                cursor='pointer'
-                            /> */}
-                    <List spacing={3}>
-                        <ListItem fontSize={{ base: 'sm', md: 'sm' }} lineHeight={1.6}>
-                            <ListIcon as={CheckCircleIcon} color='teal.300' />
-                            I will complete in few lines
-                        </ListItem>
+                    <VStack spacing={4} align="start">
+                        <Text fontSize="md" color="gray.700">
+                            👋 Hi! This modal is here to help interviewers quickly understand the context of this project.
+                        </Text>
 
-                        <ListItem fontSize={{ base: 'sm', md: 'sm' }} lineHeight={1.6}>
-                            <ListIcon as={CheckCircleIcon} color='teal.300' />
-                            As our payment gateway is not calling the
-                            <Highlight
-                                query={'/webhook'}
-                                styles={{ px: '2', py: '1', rounded: 'full', bg: 'teal.100' }}>/webhook
-                            </Highlight>
-                            route, so i decide to update order status and create webhook
-                            for relavent order in payment-status page itself.
-                        </ListItem>
+                        <Box bg="gray.100" p={4} borderRadius="md" w="full">
+                            <Text fontWeight="semibold" color="gray.800">Project Name:</Text>
+                            <Text color="gray.600">School Payment Application</Text>
+                        </Box>
 
-                        <ListItem fontSize={{ base: 'sm', md: 'sm' }}>
-                            <ListIcon as={CheckCircleIcon} color='teal.300' />
-                            After making a payment you will be redirected to payment-status page
-                            with the updated information.
-                        </ListItem>
+                        <Box bg="gray.100" p={4} borderRadius="md" w="full">
+                            <Text fontWeight="semibold" color="gray.800">Tech Stack:</Text>
+                            <Text color="gray.600">MongoDB, Express, React, Chakra UI</Text>
+                        </Box>
 
-                        <ListItem fontSize={{ base: 'sm', md: 'sm' }}>
-                            <ListIcon as={CheckCircleIcon} color='teal.300' />
-                            Finally you can see all orders on
-                            <Highlight
-                                query={'All Transactions'}
-                                styles={{ px: '2', py: '1', rounded: 'full', bg: 'teal.100' }}>All Transactions
-                            </Highlight>page.
-                        </ListItem>
+                        <Box bg="gray.100" p={4} borderRadius="md" w="full">
+                            <Text fontWeight="semibold" color="gray.800">Role:</Text>
+                            <Text color="gray.600">Full-stack Developer — handled backend APIs, frontend UI, deployment, and error handling</Text>
+                        </Box>
 
-                        <ListItem fontSize={{ base: 'sm', md: 'sm' }}>
-                            <ListIcon as={CheckCircleIcon} color='teal.300' />
-                            Just click
-                            <Highlight
-                                query={'All Transactions'}
-                                styles={{ px: '2', py: '1', rounded: 'full', bg: 'teal.100' }}>All Transactions
-                            </Highlight>button or navigate form navbar link.
-                        </ListItem>
-                    </List>
+                        <Box bg="gray.100" p={4} borderRadius="md" w="full">
+                            <Text fontWeight="semibold" color="gray.800">Current Status:</Text>
+                            <Text color="gray.600">Project deployed and stable. Final touches on API reliability and user experience.</Text>
+                        </Box>
+
+                        <Text fontSize="sm" color="gray.500" mt={2}>
+                            This modal is not part of the user-facing app — it's just here to give info about the app to the respectable interviewers during review.
+                        </Text>
+                    </VStack>
                 </ModalBody>
+
                 <ModalFooter>
+                    <Button colorScheme="blue" onClick={onClose}>
+                        Got it
+                    </Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
@@ -79,4 +64,4 @@ function InformativeModel({ isOpen, onClose }) {
 }
 
 
-export default InformativeModel;
+export default InformativeModal;

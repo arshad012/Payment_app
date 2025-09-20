@@ -11,7 +11,6 @@ const PaymentStatus = lazy(() => import('./pages/PaymentStatus'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 function App() {
-
   return (
     <Box>
       <BrowserRouter>
@@ -28,4 +27,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
